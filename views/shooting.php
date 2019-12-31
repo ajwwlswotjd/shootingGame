@@ -1,3 +1,4 @@
+<?php use Gondr\DB; ?>
 <div id="register">
 	<div class="register_container">
 		<div class="register_left">
@@ -36,12 +37,38 @@
 				
 				<button type="submit" id="register_submit">Get Started</button>
 
-				<p>Already have an account? <span>Sign in</span></p>
+				<p>Already have an account? <span class="go_login">Sign in</span></p>
 			</form>
 		</div>
 
 		<span class="register_close">&times;</span>
 	</div>	
+</div>
+
+<div id="login">
+	<div class="login-box">
+		<form action="/user_login" method="post" onsubmit="return loginProcess(this);">
+				
+			<div class="input-group">
+				<div class="input-container">
+					
+				</div>
+
+				<div class="input-container">
+					
+					
+				</div>
+			</div>
+
+		</form>
+
+		<script>
+			function loginProcess(e){
+				console.log(id.value);
+				return false;
+			}
+		</script>
+	</div>
 </div>
 
 <div id="main">
@@ -55,62 +82,74 @@
 			<?php if(__SIGN) : ?>
 				<button id="main_start" class="start_true">START</button>
 				<p class="adt_fx start_true"><span>LOGOUT</span></p>
-			<?php else : ?>
-				<button id="main_start" class="start_false">LOGIN</button>
-				<p class="adt_fx start_false"><span>SIGN UP</span></p>
-			<?php endif; ?>
+				<?php else : ?>
+					<button id="main_start" class="start_false">LOGIN</button>
+					<p class="adt_fx start_false"><span>SIGN UP</span></p>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
-</div>
 
-<script>
-	const log = console.log;
-	function getDom(selector){
-		return document.querySelector(selector);
-	}
+	<script>
+		const log = console.log;
+		function getDom(selector){
+			return document.querySelector(selector);
+		}
 
-	getDom(".adt_fx.start_false > span").addEventListener("click",(e)=>{
+		let username_ok = false;
+		let email_ok = false;
+		let password1_ok = false;
+		let password2_ok = false;
+
+		getDom(".adt_fx.start_false > span").addEventListener("click",(e)=>{
 		// Sign up 버튼을 눌러서 회원가입 팝업을 띄움
 		getDom("#main").style.filter = `blur(6px)`;
 		$("#register").fadeIn();
 		$("#register_form input").val("");
+		$("#register_form input").css({borderBottom : `2px solid #e6e6e6`});
+		$("#register_form label").css({color : `#aaa`,bottom:'6px'});
+		$("#register_form > span").css({color:"#777"});
+		username_ok = false;
+		email_ok = false;
+		password1_ok = false;
+		password2_ok = false;
 	});
 
-	getDom(".register_close").addEventListener("click",(e)=>{
-		getDom("#main").style.filter = `blur(0px)`;
-		$("#register").fadeOut();
-	});
+		getDom("#main_start.start_false").addEventListener("click",(e)=>{
+			getDom("#main").style.filter = `blur(6px)`;
+			$("#login").fadeIn();
+		});
 
-	getDom(".register_close_btn").addEventListener("click",(e)=>{
-		getDom(".register_close").click();
-	});
+		getDom(".register_close").addEventListener("click",(e)=>{
+			getDom("#main").style.filter = `blur(0px)`;
+			$("#register").fadeOut();
+		});
 
-	$("#register_form > .input-box > input").on('focus',(e)=>{
-		let parent = $(e.target).parent();
-		let label = parent[0].querySelector("label");
-		label.style.bottom = '20px';
-	});
+		getDom(".register_close_btn").addEventListener("click",(e)=>{
+			getDom(".register_close").click();
+		});
 
-	$("#register_form > .input-box > input").on('focusout',function(e){
-		let parent = $(e.target).parent();
-		let label = parent[0].querySelector("label");
-		label.style.bottom = this.value=="" ? '6px' : '20px';
-	});
+		$("#register_form > .input-box > input").on('focus',(e)=>{
+			let parent = $(e.target).parent();
+			let label = parent[0].querySelector("label");
+			label.style.bottom = '20px';
+		});
 
-	let username_ok = false;
-	let email_ok = false;
-	let password1_ok = false;
-	let password2_ok = false;
+		$("#register_form > .input-box > input").on('focusout',function(e){
+			let parent = $(e.target).parent();
+			let label = parent[0].querySelector("label");
+			label.style.bottom = this.value=="" ? '6px' : '20px';
+		});
 
-	const email_ptn = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
-	const username_ptn = /^[a-z][\w]{1,}$/;
-	const password1_ptn = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/;
+		const email_ptn = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+		const username_ptn = /^[a-z][\w]{1,}$/;
+		const password1_ptn = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/;
 
-	getDom("#register_username").addEventListener("input",(e)=>{
-		let value = e.target.value;
-		let span = getDom(".username-span");
-		let input = e.target;
-		let label = $(e.target).parent()[0].querySelector("label");
+		getDom("#register_username").addEventListener("input",(e)=>{
+			let value = e.target.value;
+			let span = getDom(".username-span");
+			let input = e.target;
+			let label = $(e.target).parent()[0].querySelector("label");
 
 		if(value == ""){ // 다 지웠다면
 			span.style.color = "#777";
@@ -119,7 +158,7 @@
 			username_ok = false;
 			return;
 		}
-			
+
 		username_ok = username_ptn.test(value);
 		let color = username_ok ? `#12cc86` : `#ff6161`;
 		input.style.borderBottom = `2px solid ${color}`;
@@ -127,80 +166,117 @@
 		span.style.color = color;
 	});
 
-	getDom("#register_email").addEventListener("input",(e)=>{
-		let value = e.target.value;
-		let span = getDom(".email-span");
-		let input = e.target;
-		let label = $(e.target).parent()[0].querySelector("label");
+		getDom(".go_login").addEventListener("click",(e)=>{
+			$("#register").fadeOut();
+			$("#main_start.start_false").click();
+		});
 
-		if(value==""){
-			span.style.color = "#777";
-			label.style.color = "#aaa";
-			input.style.borderBottom = `2px solid #e6e6e6`;
-			email_ok = false;
-			return;	
-		}
 
-		email_ok = email_ptn.test(value);
-		let color = email_ok ? `#12cc86` : `#ff6161`;
-		input.style.borderBottom = `2px solid ${color}`;
-		label.style.color = color;
-		span.style.color = color;
-	});
 
-	getDom("#register_password1").addEventListener("input",(e)=>{
-		let value = e.target.value;
-		let span = getDom(".password1-span");
-		let input = e.target;
-		let label = $(e.target).parent()[0].querySelector("label");
+		getDom("#register_email").addEventListener("input",(e)=>{
+			let value = e.target.value;
+			let span = getDom(".email-span");
+			let input = e.target;
+			let label = $(e.target).parent()[0].querySelector("label");
 
-		$("#register_password2").val("");
-		password2_ok = false;
-		let password2_input_group = $('#register_password2').parent()[0];
+			if(value==""){
+				span.style.color = "#777";
+				label.style.color = "#aaa";
+				input.style.borderBottom = `2px solid #e6e6e6`;
+				email_ok = false;
+				return;	
+			}
 
-		if(value==""){
-			span.style.color = "#777";
-			label.style.color = "#aaa";
-			input.style.borderBottom = `2px solid #e6e6e6`;
-			password1_ok = false;
-			return;	
-		}
+			email_ok = email_ptn.test(value);
+			let color = email_ok ? `#12cc86` : `#ff6161`;
+			input.style.borderBottom = `2px solid ${color}`;
+			label.style.color = color;
+			span.style.color = color;
+		});
 
-		password1_ok = password1_ptn.test(value);
-		let color = password1_ok ? `#12cc86` : `#ff6161`;
-		input.style.borderBottom = `2px solid ${color}`;
-		label.style.color = color;
-		span.style.color = color;
-	});
+		getDom("#register_password1").addEventListener("input",(e)=>{
+			let value = e.target.value;
+			let span = getDom(".password1-span");
+			let input = e.target;
+			let label = $(e.target).parent()[0].querySelector("label");
 
-	getDom("#register_password2").addEventListener("input",(e)=>{
-		let value = e.target.value;
-		let span = getDom(".password2-span");
-		let input = e.target;
-		let label = $(e.target).parent()[0].querySelector("label");		
-		if(value==""){
-			span.style.color = "#777";
-			label.style.color = "#aaa";
-			input.style.borderBottom = `2px solid #e6e6e6`;
+			$("#register_password2").val("");
 			password2_ok = false;
-			return;	
+			getDom("#register_password2").style.borderBottom = `2px solid #e6e6e6`;
+			let pwd2_label = $("#register_password2").parent()[0].querySelector("label");
+			pwd2_label.style.bottom = "6px";
+			pwd2_label.style.color = "#aaa";
+			getDom(".password2-span").style.color = "#777";
+
+
+			if(value==""){
+				span.style.color = "#777";
+				label.style.color = "#aaa";
+				input.style.borderBottom = `2px solid #e6e6e6`;
+				password1_ok = false;
+				return;	
+			}
+
+			password1_ok = password1_ptn.test(value);
+			let color = password1_ok ? `#12cc86` : `#ff6161`;
+			input.style.borderBottom = `2px solid ${color}`;
+			label.style.color = color;
+			span.style.color = color;
+		});
+
+		getDom("#register_password2").addEventListener("input",(e)=>{
+			let value = e.target.value;
+			let span = getDom(".password2-span");
+			let input = e.target;
+			let label = $(e.target).parent()[0].querySelector("label");		
+			if(value==""){
+				span.style.color = "#777";
+				label.style.color = "#aaa";
+				input.style.borderBottom = `2px solid #e6e6e6`;
+				password2_ok = false;
+				return;	
+			}
+			password2_ok = $("#register_password1").val() === value;
+			let color = password2_ok ? `#12cc86` : `#ff6161`;
+			input.style.borderBottom = `2px solid ${color}`;
+			label.style.color = color;
+			span.style.color = color;
+		});
+
+		function register_process(e){
+			if(!username_ok)  	   swal1("FAIL","Username not formatted",'error');
+			else if(!email_ok) 	   swal1("FAIL","Email not formatted",'error');
+			else if(!password1_ok) swal1("FAIL","Password not formatted",'error');
+			else if(!password2_ok) swal1("FAIL","Password Check not match",'error');
+			else {
+				let data = {};
+				data.username = $("#register_username").val();
+				data.email = $("#register_email").val();
+				data.password = $('#register_password1').val();
+				$.ajax({
+					method:'post',
+					url:"/user_register",
+					data:data,
+					success:function(result){
+						let json = JSON.parse(result);
+						console.log(json);
+						// if(result == "username") swal1("FAIL","Username overlapped",'error');
+						// else if(result == "email") swal1("FAIL","Email overlapped",'error');
+						// else if(result == "s"){
+						// 	Swal.fire('WELCOME','succeed to sign up, Thank you! :D','success')
+						// 	.then((result)=> location.reload());
+						// } else swal1("FAIL","DATABASE Error",'error');
+						
+					}
+				});
+			}
+
+
+
+			return false;
 		}
-		password2_ok = $("#register_password1").val() === value;
-		let color = password2_ok ? `#12cc86` : `#ff6161`;
-		input.style.borderBottom = `2px solid ${color}`;
-		label.style.color = color;
-		span.style.color = color;
-	});
 
-
-
-	function register_process(e){
-		console.log("asdf");
-		return false;
-	}
-
-</script>
-
-
-<!--  560 * 385 의 비율에서 오른쪽의 지분은 60%대 이므로 오른쪽 너비는
-560 * 0.6 = 336 이다. 그중 한 인풋이 239*44 를 차지한다. 이는 하나에 71% * 13% 의 크기를 가진다고 보면 된다 -->
+		function swal1(title,sub,icon){
+			Swal.fire(title,sub,icon);
+		}
+	</script>

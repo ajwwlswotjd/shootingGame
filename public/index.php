@@ -3,7 +3,6 @@
 session_start();
 define("__ROOT",dirname(__DIR__));
 define("__SIGN",isset($_SESSION['user']));
-if(__SIGN) define("__USER", $_SESSION['user']);
 
 use Gondr\Route;
 

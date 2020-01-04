@@ -24,6 +24,8 @@ li {
 	width: 100%;
 	height: 100vh;
 	background-image: url("/imgs/main.jpg");
+	background-size: cover;
+	background-position: center center;
 	position: relative;
 	filter: blur(0px);
 	transition: filter .8s;
@@ -256,6 +258,7 @@ li {
 	display: none;
 	background-size: 100% 100%;
 	border-radius: 20px;
+	box-shadow: 1px 2px 3px 2px #fff1;
 }
 
 .login-box {
@@ -273,9 +276,7 @@ li {
 	width: 100%;
 	height: 100%;
 	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	border-radius: 20px;
 }
 
 .login-box > form > .input-group {
@@ -284,7 +285,10 @@ li {
 	background-color: #fff4;
 	border-radius: 15px;
 	z-index: 10;
-	position: relative;
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%,-50%);
 }
 
 .login-box > form > .input-group > .input-container {
@@ -296,4 +300,114 @@ li {
 
 .login-box > form > .input-group > .input-container:first-child {
 	border-bottom: 1px solid #fff5;
+}
+
+.login-box > form > .input-group > .input-container > i {
+	color: #fff;
+	font-size: 25px;
+	border-right: 1px solid #fff;
+	padding-right: 10px;
+	margin-left: 15px;
+	line-height: 33px;
+}
+
+.login-box > form > .input-group > .input-container:last-child > i {
+	font-size: 23px;
+	padding-right: 12px;
+}
+
+.login-box > form > .input-group > .input-container > input {
+	width: 100%;
+	height: 100%;
+	background:transparent;
+	border: 0px solid #fff;
+	outline: none;
+	padding: 0 15px;
+	font-size: 13px;
+	color: #fff;
+}
+
+.login-box > form > .input-group > .input-container > input::placeholder {
+	color: #fffa;
+}
+
+#login_submit {
+	width: 68%;
+	height: 7%;
+	background-color: #fff4;
+	border-radius: 5px;
+	position: absolute;
+	border: none;
+	cursor: pointer;
+	color: #fff8;
+	font-size: 19px;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 34%;
+}
+
+.login_bottom {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 31%;
+	width: 68%;
+	display: flex;
+	justify-content: space-between;
+	color: #fff8;
+	font-size: 12px;
+}
+
+.login_bottom > div:hover {
+	text-decoration: underline;
+}
+
+.login_bottom > div {
+	cursor: pointer;
+}
+
+#login_submit:hover {
+	background-color: #fff5;
+}
+
+.login-close {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	font-size: 22px;
+	font-weight: bolder;
+	color: #fffc;
+	cursor: pointer;
+}
+
+.game-container {
+	width: 100%;
+	height: 100vh;
+	position: relative;
+	background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('/imgs/game.jpg');
+	background-size: cover;
+	background-position: center center;
+}
+
+.home {
+	width: 600px;
+	height: 800px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	background-color: #111f2a;
+}
+
+.home-container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.home-title {
+	text-align: center;
+	color: #fff;
+	text-shadow : 4px 4px 4px #248687, 6px 6px 4px #248687, -4px -4px 4px #248687;	
 }

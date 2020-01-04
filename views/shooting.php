@@ -1,4 +1,3 @@
-<?php use Gondr\DB; ?>
 <div id="register">
 	<div class="register_container">
 		<div class="register_left">
@@ -47,24 +46,52 @@
 
 <div id="login">
 	<div class="login-box">
-		<form action="/user_login" method="post" onsubmit="return loginProcess(this);">
-				
+		<form onsubmit="return loginProcess(this);">
+
 			<div class="input-group">
 				<div class="input-container">
-					
+					<i class="far fa-user"></i>
+					<input type="text" name="username" id="login_username" placeholder="YOUR USERNAME">
 				</div>
 
 				<div class="input-container">
-					
-					
+					<i class="fas fa-lock"></i>
+					<input type="password" name="password" id="login_password" placeholder="PASSWORD">
 				</div>
 			</div>
-
+	
+			<button type="submit" id="login_submit">Sign in</button>
+			<div class="login_bottom">
+				<div class="forget">Forget Password</div>
+				<div class="login_signUp">Sign Up</div>
+			</div>
+			<div class="login-close">&times;</div>
 		</form>
 
 		<script>
 			function loginProcess(e){
-				console.log(id.value);
+				let data = {};
+				data.username = $("#login_username").val();
+				data.password = $("#login_password").val();
+				$.ajax({
+					data:data,
+					method:'post',
+					url:'/user_login',
+					success : function(result){
+						let json = JSON.parse(result);
+						if(json.success){
+							Swal.fire({
+								title: 'SUCCESS',
+								text: json.msg,
+								icon: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonCotlor: '#d33',
+								confirmButtonText: 'OK'
+							}).then((result) => {location.reload()});
+						}else Swal.fire("FAIL",json.msg,'error');
+					}
+				});
 				return false;
 			}
 		</script>
@@ -101,6 +128,20 @@
 		let password1_ok = false;
 		let password2_ok = false;
 
+		$('.adt_fx.start_true').on("click",(e)=>{
+			$.ajax({
+				method:'post',
+				url:'/user_logout',
+				success : function(e){
+					location.reload();
+				}
+			});
+		});
+
+		$("#main_start.start_true").on("click",(e)=>{
+			location.href = "/shooting/game";
+		});
+
 		getDom(".adt_fx.start_false > span").addEventListener("click",(e)=>{
 		// Sign up 버튼을 눌러서 회원가입 팝업을 띄움
 		getDom("#main").style.filter = `blur(6px)`;
@@ -118,6 +159,7 @@
 		getDom("#main_start.start_false").addEventListener("click",(e)=>{
 			getDom("#main").style.filter = `blur(6px)`;
 			$("#login").fadeIn();
+			$("#login input").val("");
 		});
 
 		getDom(".register_close").addEventListener("click",(e)=>{
@@ -133,6 +175,16 @@
 			let parent = $(e.target).parent();
 			let label = parent[0].querySelector("label");
 			label.style.bottom = '20px';
+		});
+
+		$(".login-close").on("click",(e)=>{
+			$("#login").fadeOut();
+			getDom("#main").style.filter = `blur(0px)`;
+		});
+
+		$(".login_signUp").on("click",(e)=>{
+			$("#login").fadeOut();
+			$(".adt_fx.start_false > span").click();
 		});
 
 		$("#register_form > .input-box > input").on('focusout',function(e){
@@ -259,20 +311,20 @@
 					data:data,
 					success:function(result){
 						let json = JSON.parse(result);
-						console.log(json);
-						// if(result == "username") swal1("FAIL","Username overlapped",'error');
-						// else if(result == "email") swal1("FAIL","Email overlapped",'error');
-						// else if(result == "s"){
-						// 	Swal.fire('WELCOME','succeed to sign up, Thank you! :D','success')
-						// 	.then((result)=> location.reload());
-						// } else swal1("FAIL","DATABASE Error",'error');
-						
+						if(json.success){
+							Swal.fire({
+								title: 'SUCCESS',
+								text: json.msg,
+								icon: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',
+								cancelButtonCotlor: '#d33',
+								confirmButtonText: 'OK'
+							}).then((result) => {location.reload()});
+						}else swal1('FAIL',json.msg,'error');
 					}
 				});
 			}
-
-
-
 			return false;
 		}
 

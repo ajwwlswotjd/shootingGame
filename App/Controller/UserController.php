@@ -9,16 +9,22 @@ class UserController extends MasterController
 
 	public function login()
 	{
-		// var_dump($_POST);
-		// extract($_POST);
-
-		// var_dump($id);
-		// $user = DB::fetch("SELECT * FROM user WHERE id = ? AND password = ?", [$id, $pw]);
-		// if($user){
-		// 	$_SESSION['user'] = $user;
-		// } else {
-
-		// }
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		$sql = "SELECT * FROM `shooting_user` WHERE `username` = ? AND `password` = PASSWORD(?)";
+		$user = DB::fetch($sql,[$username,$password]);
+		if(!$user){
+			echo json_encode([
+				'success' => false,
+				'msg' => 'Incorrect username or password.'
+			],JSON_UNESCAPED_UNICODE);
+		}else {
+			echo json_encode([
+				'success' => true,
+				'msg' => 'Hello, '.htmlentities($user->username).'!'
+			],JSON_UNESCAPED_UNICODE);
+			$_SESSION['user'] = $user;
+		}
 	}
 
 	public function registerProcess()
@@ -32,14 +38,14 @@ class UserController extends MasterController
 		$user = DB::fetch($sql,[$username]);
 
 		if($user){
-			echo json_encode(['success' => false, 'msg' => '동일한 이름의 회원이 존재합니다.'],JSON_UNESCAPED_UNICODE);
+			echo json_encode(['success' => false, 'msg' => 'Username already in use'],JSON_UNESCAPED_UNICODE);
 			return;
 		}
 
 		$sql = "SELECT * FROM `shooting_user` WHERE `email` = ?";
 		$user = DB::fetch($sql,[$email]);
 		if($user){
-			echo json_encode(['success' => false, 'msg' => '동일한 이메일의 회원이 존재합니다.'],JSON_UNESCAPED_UNICODE);
+			echo json_encode(['success' => false, 'msg' => 'Email already in use'],JSON_UNESCAPED_UNICODE);
 			return;
 		}
 
@@ -47,9 +53,14 @@ class UserController extends MasterController
 		$result = DB::query($sql,[$username,$email,$password]);
 		
 		if($result == 1){
-			echo json_encode(['success' => true, 'msg' => '회원가입 성공'],JSON_UNESCAPED_UNICODE);	
+			echo json_encode(['success' => true, 'msg' => 'Sign up has been completed. Welcome '.$username.'!'],JSON_UNESCAPED_UNICODE);	
 		}else {
-			echo json_encode(['success' => false, 'msg' => 'DB 오류 발생'],JSON_UNESCAPED_UNICODE);
+			echo json_encode(['success' => false, 'msg' => 'DB Error Occurred, Please try again.'],JSON_UNESCAPED_UNICODE);
 		}
+	}
+
+	public function logout()
+	{
+		unset($_SESSION['user']);
 	}
 }

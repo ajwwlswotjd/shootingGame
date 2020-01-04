@@ -15,4 +15,14 @@ class MainController extends MasterController {
 	{
 		$this->render("shooting");
 	}
+
+	public function test()
+	{
+		$this->render('test');
+	}
+
+	public function inGame()
+	{
+		require __ROOT . '/views/game/game.php';
+	}
 }

@@ -1,11 +1,11 @@
 class Player {
-    constructor(x, y, w, h, img,app){
+    constructor(x, y, w, h, img,app,imgLeft,imgRight){
     	this.app = app;
         this.x = x;
         this.y = y;
         this.w = w;
-        this.hp = 10;
-        this.hpMax = 10;
+        this.hp = 100;
+        this.hpMax = this.hp;
         this.h = h;
         this.img = img;
         this.fireTerm = 0.2;
@@ -14,6 +14,8 @@ class Player {
         this.keyArr = [];
         this.speed = 150;
         this.firing = false;
+        this.imgLeft = imgLeft;
+        this.imgRight = imgRight;
         this.init();        
     }
 
@@ -37,12 +39,12 @@ class Player {
         })
     }
 
-    setDamage(value){
+    setDamage(value,bulletX,bulletY,bulletRadius){
         this.hp -= value;
         if(this.hp <= 0){
             this.explosion();
             App.app.stopGame("GAME OVER");
-        }
+        }else App.app.getOrCreateExplosion(bulletX-bulletRadius-10,bulletY,bulletRadius,bulletRadius,10);
     }
 
     explosion(){
@@ -55,7 +57,7 @@ class Player {
         if(this.currentFireTerm > 0 || !this.active) return;
         let left = this.keyArr[0] && !this.keyArr[1];
         let right = this.keyArr[1] && !this.keyArr[0];
-        let dir = left ? -0.6 : right ? 0.6 : 0;
+        let dir = left && !right ? -0.6 : right && !left ? 0.6 : 0;
         this.app.getOrCreateBullet(this.x+this.w/2, this.y , 3 , 300, new Vector(dir,-1),false); // 가운데꺼
         this.app.getOrCreateBullet(this.x+this.w/2+20, this.y , 3 , 300, new Vector(dir,-1).normalize(),false); // 오른쪽꺼
         this.app.getOrCreateBullet(this.x+this.w/2-20, this.y , 3 , 300, new Vector(dir,-1).normalize(),false); // 왼쪽꺼
@@ -65,8 +67,8 @@ class Player {
     update(d){
         if(this.fireTerm > 0) this.currentFireTerm -= d;
         let dx = 0, dy = 0;
-        if(this.keyArr[0])  dx = -1;
-        if(this.keyArr[1])  dx = 1;
+        if(this.keyArr[0] && !this.keyArr[1])  dx = -1;
+        if(this.keyArr[1] && !this.keyArr[0])  dx = 1;
         if(this.keyArr[2])  dy = -1;
         if(this.keyArr[3])  dy = 1;
         if(this.firing) this.fire();
@@ -95,7 +97,7 @@ class Player {
 
     render(ctx){
         if(!this.active) return;
-        ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+        ctx.drawImage(this.keyArr[0] && !this.keyArr[1] ? this.imgLeft : this.keyArr[1] && !this.keyArr[0] ? this.imgRight : this.img, this.x,this.y,this.w,this.h);
         ctx.strokeStyle = "#ff3b3b";
         ctx.strokeRect(this.x,this.y+this.h+10,this.w,10);
         let percent = this.hp / this.hpMax;

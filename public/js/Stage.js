@@ -570,7 +570,7 @@ class Stage {
 				w:300,
 				h : 200,
 				img: imgs.boss1,
-				fireTerm : 1000,
+				fireTerm : 100,
 				hp:200,
 				s: 20,
 				boss1:true,

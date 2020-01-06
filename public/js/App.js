@@ -54,6 +54,8 @@ class App {
         this.imageList.enemy2 = await this.loadImage("enemy2.gif");
         this.imageList.enemy3 = await this.loadImage("enemy3.png");
         this.imageList.boss1 = await this.loadImage("boss1.png");
+        this.imageList.playerLeft = await this.loadImage("playerLeft.png");
+        this.imageList.playerRight = await this.loadImage("playerRight.png");
         
         //백그라운드 생성
         for(let i = 0; i < 3; i++){
@@ -65,7 +67,7 @@ class App {
         //플레이어 생성(x좌표 y좌표 너비 높이 이미지)
         this.player = new Player(
             this.gameWidth / 2 - this.playerWidth/2, this.gameHeight - 120,
-            this.playerWidth,this.playerHeight, this.imageList.player, this);
+            this.playerWidth,this.playerHeight, this.imageList.player, this, this.imageList.playerLeft,this.imageList.playerRight);
 
         let stage = new Stage(this.gameWidth, this.gameHeight, this.imageList);
         this.stageData = stage.stage1;
@@ -73,13 +75,13 @@ class App {
         requestAnimationFrame(this.frame.bind(this));
     }
 
-    getOrCreateExplosion(x,y,w,h){
+    getOrCreateExplosion(x,y,w,h,scale=1){
         let exp = this.expList.find(x=> !x.active);
         if(exp === undefined){
             exp = new Explosion(this.imageList.explosion);
             this.expList.push(exp);
         }
-        exp.setActive(x,y,w,h);
+        exp.setActive(x,y,w,h,scale);
     }
 
     getOrCreateBullet(x, y, r, s, v, isEnemy = true){
@@ -157,9 +159,9 @@ class App {
                     }
                 });
             }else {
-                //적총알이 플레이어에 충돌했는지를 검사 => 불렛 b 를 갖고있음
+                //적총알이 플레이어에 충돌했는지를 검사 => 불렛 b 를 갖고있음 , 모든 블렛에 대하여 검사중
                 if(this.player.checkCollision(b.x,b.y,b.r)){
-                    this.player.setDamage(b.damage);
+                    this.player.setDamage(b.damage,b.x,b.y,b.r);
                     b.active = false;
                 }
             }

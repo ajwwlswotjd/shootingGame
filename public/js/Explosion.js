@@ -4,6 +4,7 @@ class Explosion {
 		this.y = null;
 		this.w = null;
 		this.img = img;
+		this.scale = null;
 		this.h = null;
 		this.now = 0;
 		this.duration = 1.2;
@@ -24,15 +25,16 @@ class Explosion {
 		if(!this.active) return;
 		let sx = this.idx % 5 * 64;
 		let sy = Math.floor(this.idx / 5) * 64;
-		ctx.drawImage(this.img,sx,sy,64,64,this.x,this.y,this.w,this.h);
+		ctx.drawImage(this.img,sx,sy,64,64,this.x,this.y,this.w*this.scale,this.h*this.scale);
 	}
 
-	setActive(x,y,w,h){
+	setActive(x,y,w,h,scale){
 		this.x = x;
 		this.y = y;
 		this.w = w;
 		this.h = h;
 		this.active = true;
+		this.scale = scale;
 		this.now = 0;
 	}
 }

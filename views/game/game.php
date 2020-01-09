@@ -52,13 +52,24 @@
 </head>
 <body>
     <div class="game-container">
+
+    
+        <div id="pause">
+            <div class="pause-container">
+                <h1>PAUSED</h1>
+                <button id="resume">RESUME</button>
+                <button id="RESTART">RESTART</button>
+                <button id="quit">QUIT</button>
+            </div>
+        </div>
+
         <div class="home">
             <div class="home-container">
                 <h1 class="home-title">SHOOTING GAME</h1>
                 <button class="main-btn" id="start">START</button>
                 <button class="main-btn" id="option">OPTION</button>
-                <button class="main-btn" id="rank">RANKING</button>
-                <button class="main-btn" id="exit">EXIT</button>
+                <button class="main-btn btn-href" id="rank" data-href="/shooting/rank">RANKING</button>
+                <button class="main-btn btn-href" id="exit" data-href="/shooting">EXIT</button>
             </div>
         </div>
         <canvas id="myGame" width="600" height="800"></canvas>
@@ -71,6 +82,12 @@
             $("#myGame").fadeIn();
             let app = new App();
         });
+
+
+
+        document.querySelectorAll(".btn-href").forEach(x=> x.addEventListener("click",(e)=> location.href = x.dataset.href));
+
+
     </script>
 
     <script>
@@ -126,7 +143,7 @@
             }
         }
 
-        // for(let i=0; i < 100; i++) new Star();
+        // for(let i=0; i < 500; i++) new Star();
     </script> <!-- 심심해서 만듬 -->
 </body>
 </html>

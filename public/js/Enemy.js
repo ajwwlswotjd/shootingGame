@@ -24,14 +24,14 @@ class Enemy{
         this.active = true;
         this.hp = hp;
         this.fireTerm = fireTerm;
-        this.fire();
+        this.fire(); 
     }
 
-    setDamage(value){
+    setDamage(value,bulletX,bulletY,bulletRadius){
         this.hp -= value;
         if(this.hp <= 0){
             this.explosion();
-        }
+        }else App.app.getOrCreateExplosion(bulletX-bulletRadius-10,bulletY,bulletRadius,bulletRadius,10);
     }
 
     explosion(){

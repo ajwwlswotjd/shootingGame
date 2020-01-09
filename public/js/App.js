@@ -2,6 +2,14 @@ class App {
     constructor(){
         App.app = this; // 앱에 스태틱으로 넣었다 이말이야
         this.canvas = document.querySelector("#myGame");
+
+        document.addEventListener("keydown",(e)=>{
+            if(e.keyCode === 27) this.pauseShow()
+        });
+        document.querySelector("#resume").addEventListener("click",(e)=> this.pauseShow());
+
+
+
         this.ctx = this.canvas.getContext("2d");
         this.gameWidth = this.canvas.width;
         this.bgmAudio = new Audio();
@@ -9,7 +17,7 @@ class App {
         this.bgmAudio.onloadeddata = ()=>{
             this.bgmAudio.volume = 0;
             this.bgmAudio.loop = true;
-            // this.bgmAudio.play();
+            this.bgmAudio.play();
         };
         document.querySelector("#range").addEventListener("input",(e)=>{
             this.bgmAudio.volume = e.target.value/100;
@@ -18,6 +26,7 @@ class App {
         this.gameHeight = this.canvas.height;
         this.pause = false;
         this.start = false;
+        this.gameOver = false;
         this.imageList = {}; //이미지 저장 오브젝트
         this.playerWidth = 60;
         this.playerHeight = 60;
@@ -40,6 +49,21 @@ class App {
     pauseAction(){
         this.pause = !this.pause;
         this.pause ? this.bgmAudio.pause() : this.bgmAudio.play();
+    }
+
+    pauseShow(){
+        this.pauseAction();
+
+        if(this.pause){
+
+            $("#pause").fadeIn();
+            $("#pause").css({display:"flex"});
+
+        }else {
+
+            $("#pause").fadeOut();
+
+        }
     }
 
     setVolume(value){
@@ -92,6 +116,8 @@ class App {
         }
         bullet.setActive(x,y,r,s,v, isEnemy);
     }
+
+    // https://bashooka.com/inspiration/ranking-table-ui-designs/
 
     getOrCreateEnemy(data){
         let e = this.enemyList.find(x => !x.active);
@@ -154,7 +180,7 @@ class App {
             if(!b.isEnemy){
                 this.enemyList.filter(e => e.active).forEach(e => {
                     if(e.checkCollision(b.x, b.y, b.r)){
-                        e.setDamage(b.damage);
+                        e.setDamage(b.damage,b.x,b.y,b.r);
                         b.active = false;
                     }
                 });
@@ -180,16 +206,17 @@ class App {
     }
 
     stopGame(text){
-        setTimeout(()=>{
-            this.pause = true;
-            this.ctx.clearRect(0,0,this.gameWidth,this.gameHeight);
-            this.ctx.fillStyle = "#333030";
-            this.ctx.fillRect(0,0,this.gameWidth,this.gameHeight);
-            this.ctx.font = "bold 35px Arial";
-            this.ctx.textAlign = "center";
-            this.ctx.textBaseline = "middle";
-            this.ctx.fillStyle = "#f4f5f9";
-            this.ctx.fillText(text,this.gameWidth/2,this.gameHeight/2);
-        },1200);
+        // setTimeout(()=>{
+        //     this.pause = true;
+        //     this.ctx.clearRect(0,0,this.gameWidth,this.gameHeight);
+        //     this.ctx.fillStyle = "#333030";
+        //     this.ctx.fillRect(0,0,this.gameWidth,this.gameHeight);
+        //     this.ctx.font = "bold 35px Arial";
+        //     this.ctx.textAlign = "center";
+        //     this.ctx.textBaseline = "middle";
+        //     this.ctx.fillStyle = "#f4f5f9";
+        //     this.ctx.fillText(text,this.gameWidth/2,this.gameHeight/2);
+        // },1200);
+        this.gameOver = true;
     }
 }

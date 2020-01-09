@@ -440,3 +440,54 @@ li {
 	background-size: cover;
 	background-position: center center;
 }
+
+
+#pause {
+	width: 600px;
+	height: 800px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);	
+	background-color: #000d;
+	z-index: 10;
+	display: none;
+	/*display: flex;*/
+	justify-content: center;
+	align-items: center;
+}
+
+.pause-container {
+	width: auto;
+	height: auto;
+	position: relative;
+}
+
+.pause-container > h1 {
+	text-align: center;
+	color: #fff;
+	font-size: 45px;
+	text-shadow : 4px 4px 7px #248687, -4px -4px 7px #248687, -4px 4px 7px #248687, 4px -4px 7px #248687;	
+	position: relative;
+}
+
+.pause-container > button {
+	position: relative;
+	display: block;
+	width: 200px;
+	height: 78px;
+	margin: 0 auto;
+	background-image: url('/imgs/button1h.png');
+	border: none;
+	margin-top: 30px;
+	outline: none;
+	cursor: pointer;
+	color: #fff;
+	font-weight: bolder;
+	font-size: 17px;
+}
+
+
+.pause-container > button:hover {
+	background-image: url('/imgs/button1.png');	
+}
